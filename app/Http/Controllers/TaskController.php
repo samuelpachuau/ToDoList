@@ -10,7 +10,7 @@ class TaskController extends Controller
     public function index()
     {
         $tasks =Task::all();
-        return view('home', compact('tasks')); // this means resources/views/tasks.blade.php
+        return view('home', compact('tasks')); 
     }
 
     public function store(Request $request)
@@ -18,6 +18,22 @@ class TaskController extends Controller
         Task::create([
             'title' => $request->input('title')
         ]);
+
+        return redirect('/');
+        }
+    public function finish($id)
+    {
+        $task = Task::findOrFail($id);
+        $task->completed = true;
+        $task->save();
+
+        return redirect('/');
+    }
+
+    public function destroy($id)
+    {
+        $task = Task::findOrFail($id);
+        $task->delete();
 
         return redirect('/');
     }

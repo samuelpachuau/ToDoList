@@ -10,19 +10,39 @@
     </head>
     <body>
         <div class="container">
-            <h2>To Do</h2>
+
+            <h2>To Do List</h2>
+
             <form action="/submit" method="post" class="add-task-form">
             @csrf
             <input type="text" id="ToDO" name="title" placeholder="Add new task" class="add-task-input">
             <input type="submit" value="+" class="add-task-button">
             </form>
 
-            <h3>Pending Tasks</h3>
-            <ul>
+            <div class="task-list">
                 @foreach ($tasks as $task)
-                    <li>{{ $task->title }}</li>
+                    <div class="task-row">
+                        <div class="task-item {{ $task->completed ? 'completed' : '' }}">
+                            {{ $task->title }}
+                        </div>
+
+                        <div class="task-actions">
+                            @if (!$task->completed)
+                                <form action="{{ route('task.finish', $task->id) }}" method="POST">
+                                    @csrf
+                                    <button class="finish-btn">✔</button>
+                                </form>
+                            @endif
+
+                            <form action="{{ route('task.delete', $task->id) }}" method="POST">
+                                @csrf
+                                <button class="delete-btn">🗑</button>
+                            </form>
+                        </div>
+                    </div>
                 @endforeach
-            </ul>
+
+            </div>
 
         </div> 
     </body>
